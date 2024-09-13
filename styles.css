@@ -1,0 +1,107 @@
+/* Styles de base */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Couleurs pour chaque matière */
+.maths {
+    background-color: #4CAF50; /* Vert pour maths */
+    color: white;
+}
+
+.francais {
+    background-color: #FF5733; /* Orange pour français */
+    color: white;
+}
+
+.histoire {
+    background-color: #3498DB; /* Bleu pour histoire */
+    color: white;
+}
+
+.geographie {
+    background-color: #28B463; /* Vert foncé pour géographie */
+    color: white;
+}
+
+.sciences {
+    background-color: #9B59B6; /* Violet pour sciences */
+    color: white;
+}
+
+.all {
+    background-color: #E67E22; /* Jaune/orange pour toutes les matières */
+    color: white;
+}
+
+/* Style pour les réponses */
+.correct {
+    background-color: green;
+    color: white;
+}
+
+.incorrect {
+    background-color: red;
+    color: white;
+}
+
+/* Images */
+#image-container img {
+    max-width: 100%;
+    height: auto;
+    margin: 20px 0;
+}
+
+/* Historique des scores */
+#history-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#history-list li {
+    background-color: #f9f9f9;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+/* Réduire la taille des images dans le quiz */
+#image-container img {
+    max-width: 200px; /* Limite la largeur maximale à 200px */
+    max-height: 200px; /* Limite la hauteur maximale à 200px */
+    width: auto; /* Préserve le ratio largeur/hauteur */
+    height: auto; /* Préserve le ratio largeur/hauteur */
+    display: block; /* Assure que l'image est affichée en tant que bloc */
+    margin: 0 auto; /* Centre l'image horizontalement */
+}
+/* Styliser les questions du quiz */
+#question-container {
+    font-family: 'Arial', sans-serif; /* Choisir une police lisible et élégante */
+    font-size: 24px; /* Augmenter la taille de la police */
+    font-weight: bold; /* Rendre le texte en gras pour plus de lisibilité */
+    color: #333; /* Choisir une couleur de texte sombre pour un meilleur contraste */
+    text-align: center; /* Centrer le texte des questions */
+    margin: 20px 0; /* Ajouter de l'espace autour du texte des questions */
+}
+#question-container {
+    font-family: 'Roboto', sans-serif; /* Utiliser la police Roboto */
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin: 20px 0;
+}

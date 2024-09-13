@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Révisions Brevet</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+</head>
+<body>
+    <header>
+        <h1>Quiz Révisions Brevet</h1>
+        <p>Sélectionnez une matière pour commencer</p>
+    </header>
+
+    <section id="subject-selection">
+        <button class="btn maths" onclick="startQuiz('maths')">Mathématiques</button>
+        <button class="btn francais" onclick="startQuiz('francais')">Français</button>
+        <button class="btn histoire" onclick="startQuiz('histoire')">Histoire</button>
+        <button class="btn geographie" onclick="startQuiz('geographie')">Géographie</button>
+        <button class="btn sciences" onclick="startQuiz('sciences')">Sciences</button>
+        <button class="btn all" onclick="showQuestionCountSelection()">Toutes les matières</button>
+    </section>
+
+    <section id="question-count-selection" class="hidden">
+        <h2>Choisissez le nombre de questions :</h2>
+        <button onclick="selectNumberOfQuestions(20)">20 Questions</button>
+        <button onclick="selectNumberOfQuestions(40)">40 Questions</button>
+    </section>
+
+    <section id="quiz-section" class="hidden">
+        <h2 id="subject-title"></h2>
+        <div id="image-container"></div>
+        <div id="question-container"></div>
+        <div id="answer-buttons" class="btn-group"></div>
+        <button id="next-btn" class="hidden" onclick="nextQuestion()">Suivant</button>
+        <button id="back-to-menu-btn" onclick="goToMenu()">Revenir au menu</button>
+    </section>
+
+    <section id="result-section" class="hidden">
+        <h2>Résultats</h2>
+        <p id="result-score"></p>
+        <button onclick="restartQuiz()">Recommencer</button>
+        <button onclick="goToMenu()">Revenir au menu</button>
+    </section>
+
+    <section id="history-section" class="hidden">
+        <h2>Historique des scores</h2>
+        <ul id="history-list"></ul>
+    </section>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
+
