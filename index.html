@@ -13,21 +13,25 @@
         <p>Sélectionnez une matière pour commencer</p>
     </header>
 
+    <!-- Section de sélection des matières -->
     <section id="subject-selection">
         <button class="btn maths" onclick="startQuiz('maths')">Mathématiques</button>
         <button class="btn francais" onclick="startQuiz('francais')">Français</button>
         <button class="btn histoire" onclick="startQuiz('histoire')">Histoire</button>
         <button class="btn geographie" onclick="startQuiz('geographie')">Géographie</button>
         <button class="btn sciences" onclick="startQuiz('sciences')">Sciences</button>
+        <button class="btn cfg" onclick="startQuiz('cfg')">CFG</button>
         <button class="btn all" onclick="showQuestionCountSelection()">Toutes les matières</button>
     </section>
 
+    <!-- Section de sélection du nombre de questions -->
     <section id="question-count-selection" class="hidden">
         <h2>Choisissez le nombre de questions :</h2>
         <button onclick="selectNumberOfQuestions(20)">20 Questions</button>
         <button onclick="selectNumberOfQuestions(40)">40 Questions</button>
     </section>
 
+    <!-- Section du quiz -->
     <section id="quiz-section" class="hidden">
         <h2 id="subject-title"></h2>
         <div id="image-container"></div>
@@ -37,20 +41,26 @@
         <button id="back-to-menu-btn" onclick="goToMenu()">Revenir au menu</button>
     </section>
 
+    <!-- Section des résultats -->
     <section id="result-section" class="hidden">
         <h2>Résultats</h2>
         <p id="result-score"></p>
         <button onclick="restartQuiz()">Recommencer</button>
         <button onclick="goToMenu()">Revenir au menu</button>
+	<div id="questions-review"></div>
     </section>
 
+    <!-- Section de l'historique des scores -->
     <section id="history-section" class="hidden">
         <h2>Historique des scores</h2>
         <ul id="history-list"></ul>
+        <button onclick="goToMenu()">Revenir au menu</button>
     </section>
 
     <script src="app.js"></script>
 </body>
 </html>
+
+
 
 
