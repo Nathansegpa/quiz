@@ -12,16 +12,16 @@ const quizData = {
         { question: "Quelle est la nature du mot 'aujourd'hui' ?", answers: ["Adjectif", "Adverbe", "Préposition"], correct: 1 },
         { question: "Quelle est la nature du mot 'manger' ?", answers: ["Pronom", "Adverbe", "Verbe"], correct: 2 },
         { question: "Quelle est la nature du mot 'je' ?", answers: ["Pronom", "Préposition", "Préposition"], correct: 0 },
-        { question: "A quel temps est conjugué le verbe dans 'je mange' ?", answers: ["Présent", "Imparfait", "Futur"], correct: 0 },
+        { question: "À quel temps est conjugué le verbe dans 'je mange' ?", answers: ["Présent", "Imparfait", "Futur"], correct: 0 },
         { question: "'Manger' à la 2e personne du singulier donne :", answers: ["Mange", "Manges", "Mangez"], correct: 1 },
-        { question: "'Manger' à la 1ere personne du pluriel donne :", answers: ["Mangent", "Mangez", "Mangeons"], correct: 2 },
+        { question: "'Manger' à la 1ère personne du pluriel donne :", answers: ["Mangent", "Mangez", "Mangeons"], correct: 2 },
         { question: "Ce garçon ... plus grand que toi.", answers: ["es", "et", "est"], correct: 2 },
         { question: "Tu ... une belle maison.", answers: ["as", "a", "à"], correct: 0 },
         { question: "Ils ... impressionnés par ton exposé.", answers: ["sont", "son", "sons"], correct: 0 },
         { question: "Qu'est-ce qu'un synonyme ?", answers: ["un mot contraire", "un mot qui a le même son", "un mot qui veut dire la même chose"], correct: 2 },
-        { question: "'Aller' est une verbe du :", answers: ["1er groupe", "2e groupe", "3e groupe"], correct: 2 },
-        { question: "'Vomir' est une verbe du :", answers: ["1er groupe", "2e groupe", "3e groupe"], correct: 1 },
-        { question: "'Venir' est une verbe du :", answers: ["1er groupe", "2e groupe", "3e groupe"], correct: 2 },
+        { question: "'Aller' est un verbe du :", answers: ["1er groupe", "2e groupe", "3e groupe"], correct: 2 },
+        { question: "'Vomir' est un verbe du :", answers: ["1er groupe", "2e groupe", "3e groupe"], correct: 1 },
+        { question: "'Venir' est un verbe du :", answers: ["1er groupe", "2e groupe", "3e groupe"], correct: 2 },
         { question: "Qu'est-ce qu'un antonyme ?", answers: ["un mot contraire", "un mot qui a le même son", "un mot qui veut dire la même chose"], correct: 0 },
     ],
     histoire: [
@@ -35,6 +35,10 @@ const quizData = {
     sciences: [
         { question: "Quelle est la planète la plus proche du soleil ?", answers: ["Venus", "Mercure", "Mars"], correct: 1 },
         { question: "Quelle est la formule chimique de l'eau ?", answers: ["CO2", "O2", "H2O"], correct: 2 }
+    ],
+    cfg: [
+        { question: "Qu'est-ce que le Conseil de la vie lycéenne ?", answers: ["Un organe consultatif", "Une association sportive", "Un syndicat"], correct: 0 },
+        { question: "Quelle est la mission principale du CPE ?", answers: ["Gérer les absences", "Aider à l’orientation", "Surveiller les examens"], correct: 1 }
     ]
 };
 
@@ -44,6 +48,7 @@ const subjectImages = {
     histoire: "https://memoire-histoire.fr/wp-content/uploads/2017/03/histoire.jpg",
     geographie: "https://data.topquizz.com/distant/category/original/17.jpg",
     sciences: "https://media.istockphoto.com/photos/molecules-on-scientific-background-picture-id484278596?k=6&m=484278596&s=612x612&w=0&h=7bbpn3A_e5VJyhRxCQZwTtED3QvjQDDM59l-kJNuqnk=",
+    cfg: "https://knowledgeone.ca/wp-content/uploads/2019/09/profond.jpg", // Remplacer par une URL valide
     all: "https://svtclasseinversee.blogs.laclasse.com/wp-content/uploads/sites/2278/2021/05/DNB-750x515.jpg"
 };
 
@@ -53,6 +58,17 @@ let currentQuestionIndex = 0;
 let score = 0;
 let history = JSON.parse(localStorage.getItem('quizHistory')) || [];
 let questionCount = 20; // Valeur par défaut
+
+// Stockage des réponses de l'élève
+let studentAnswers = [];
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 
 function showQuestionCountSelection() {
     document.getElementById('subject-selection').classList.add('hidden');
@@ -68,21 +84,32 @@ function startQuiz(subject) {
     currentSubject = subject;
     currentQuestionIndex = 0;
     score = 0;
+    studentAnswers = []; // Réinitialiser les réponses de l'élève
 
     if (subject === 'all') {
-        const allQuestions = [...quizData.maths, ...quizData.francais, ...quizData.histoire, ...quizData.geographie, ...quizData.sciences];
+        const allQuestions = [
+            ...quizData.maths,
+            ...quizData.francais,
+            ...quizData.histoire,
+            ...quizData.geographie,
+            ...quizData.sciences,
+            ...quizData.cfg
+        ];
         currentQuestions = shuffle(allQuestions).slice(0, questionCount);
     } else {
-        currentQuestions = shuffle(quizData[subject]); // Mélange des questions pour les matières individuelles
+        currentQuestions = shuffle(quizData[subject]);
     }
 
     document.getElementById('subject-title').textContent = subject === 'all' ? "Toutes les matières" : subject.charAt(0).toUpperCase() + subject.slice(1);
 
-    // Afficher l'image de la matière
     const imgContainer = document.getElementById('image-container');
     imgContainer.innerHTML = `<img src="${subjectImages[subject]}" alt="Image pour ${subject}" />`;
 
-    document.getElementById('question-count-selection').classList.add('hidden');
+    if (subject === 'all') {
+        document.getElementById('question-count-selection').classList.add('hidden');
+    } else {
+        document.getElementById('subject-selection').classList.add('hidden');
+    }
     document.getElementById('quiz-section').classList.remove('hidden');
 
     loadQuestion();
@@ -98,6 +125,7 @@ function loadQuestion() {
     questionData.answers.forEach((answer, index) => {
         const button = document.createElement('button');
         button.textContent = answer;
+        button.classList.add('answer-btn');
         button.addEventListener('click', () => selectAnswer(index));
         answerButtons.appendChild(button);
     });
@@ -114,6 +142,12 @@ function selectAnswer(selectedAnswer) {
             button.classList.add('incorrect');
         }
         button.disabled = true;
+    });
+
+    studentAnswers.push({
+        question: questionData.question,
+        correctAnswer: questionData.answers[questionData.correct],
+        selectedAnswer: questionData.answers[selectedAnswer]
     });
 
     if (selectedAnswer === questionData.correct) {
@@ -140,7 +174,20 @@ function showResults() {
     const resultText = `Votre score est de ${score}/${currentQuestions.length}`;
     document.getElementById('result-score').textContent = resultText;
 
-    // Enregistrer l'historique
+    const questionsReview = document.getElementById('questions-review');
+    questionsReview.innerHTML = '<h3>Révision des questions</h3>';
+    
+    studentAnswers.forEach((answer, index) => {
+        const reviewItem = document.createElement('div');
+        reviewItem.classList.add('review-item');
+        reviewItem.innerHTML = `
+            <p><strong>Question :</strong> ${answer.question}</p>
+            <p><strong>Réponse correcte :</strong> ${answer.correctAnswer}</p>
+            <p><strong>Votre réponse :</strong> ${answer.selectedAnswer}</p>
+        `;
+        questionsReview.appendChild(reviewItem);
+    });
+
     history.push({ subject: currentSubject, score: score, total: currentQuestions.length });
     localStorage.setItem('quizHistory', JSON.stringify(history));
     updateHistory();
@@ -152,7 +199,7 @@ function updateHistory() {
 
     history.forEach((entry, index) => {
         const li = document.createElement('li');
-        li.textContent = `Jeu ${index + 1}: ${entry.subject === 'all' ? "Toutes les matières" : entry.subject} - Score: ${entry.score}/${entry.total}`;
+        li.textContent = `Jeu ${index + 1}: ${entry.subject === 'all' ? "Toutes les matières" : entry.subject.charAt(0).toUpperCase() + entry.subject.slice(1)} - Score: ${entry.score}/${entry.total}`;
         historyList.appendChild(li);
     });
 
@@ -171,11 +218,3 @@ function goToMenu() {
     document.getElementById('subject-selection').classList.remove('hidden');
 }
 
-// Fonction pour mélanger les questions
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
