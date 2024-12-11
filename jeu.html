@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Révision Brevet</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .menu-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            background-size: cover;
+            background-position: center;
+            height: 100px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .menu-button:hover {
+            opacity: 0.8;
+        }
+        #all { background-color: #3498db; }
+        #histoire { background-color: #e74c3c; }
+        #geographie { background-color: #2ecc71; }
+        #maths { background-color: #f39c12; }
+        #francais { background-color: #9b59b6; }
+        #sciences { background-color: #1abc9c; }
+        #question {
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        #options button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #options button:hover {
+            background-color: #2980b9;
+        }
+        #result {
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        #nextButton {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #nextButton:hover {
+            background-color: #27ae60;
+        }
+        #leaderboard {
+            margin-top: 20px;
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        #leaderboard h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        #leaderboard ol {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Super Révision Brevet</h1>
+        <div id="menu">
+            <button id="all" class="menu-button" onclick="startGame('all')">Toutes les matières</button>
+            <button id="histoire" class="menu-button" onclick="startGame('Histoire')">Histoire</button>
+            <button id="geographie" class="menu-button" onclick="startGame('Géographie')">Géographie</button>
+            <button id="maths" class="menu-button" onclick="startGame('Mathématiques')">Mathématiques</button>
+            <button id="francais" class="menu-button" onclick="startGame('Français')">Français</button>
+            <button id="sciences" class="menu-button" onclick="startGame('Sciences')">Sciences</button>
+        </div>
+        <div id="quiz" style="display:none;">
+            <div id="question"></div>
+            <div id="options"></div>
+            <div id="result"></div>
+            <button id="nextButton" style="display:none;">Question suivante</button>
+        </div>
+        <div id="score"></div>
+        <div id="leaderboard"></div>
+    </div>
+
+    <script>
+        const questions = {
+            "Histoire": [
+                {
+                    question: "En quelle année a commencé la Première Guerre mondiale ?",
+                    options: ["1914", "1918", "1939", "1945"],
+                    reponse: "1914"
+                },
+                {
+                    question: "Qui était le leader de la Résistance française pendant la Seconde Guerre mondiale ?",
+                    options: ["Charles de Gaulle", "Philippe Pétain", "Jean Moulin", "François Mitterrand"],
+                    reponse: "Charles de Gaulle"
+                }
+            ],
+            "Géographie": [
+                {
+                    question: "Quel est le plus long fleuve de France ?",
+                    options: ["La Loire", "La Seine", "Le Rhône", "La Garonne"],
+                    reponse: "La Loire"
+                },
+                {
+                    question: "Quelle est la capitale de l'Union Européenne ?",
+                    options: ["Bruxelles", "Strasbourg", "Paris", "Berlin"],
+                    reponse: "Bruxelles"
+                }
+            ],
+            "Mathématiques": [
+                {
+                    question: "Quelle est la formule de l'aire d'un cercle ?",
+                    options: ["πr²", "2πr", "πd", "r²"],
+                    reponse: "πr²"
+                },
+                {
+                    question: "Combien vaut la racine carrée de 144 ?",
+                    options: ["12", "14", "10", "16"],
+                    reponse: "12"
+                }
+            ],
+            "Français": [
+                {
+                    question: "Qu'est-ce que des paronymes ?",
+                    options: ["2 mots qui se prononcent pareil", "2 mots de même sens", "2 mots qui s'écrivent presque pareil", "2 mots contraires"],
+                    reponse: "2 mots qui s'écrivent presque pareil"
+                },
+                {
+                    question: "Qu'est-ce que des antonymes ?",
+                    options: ["2 mots qui se prononcent pareil", "2 mots de même sens", "2 mots qui s'écrivent presque pareil", "2 mots contraires"],
+                    reponse: "2 mots contraires"
+                },
+ 		{
+                    question: "Qu'est-ce que des synonymes ?",
+                    options: ["2 mots qui se prononcent pareil", "2 mots de même sens", "2 mots qui s'écrivent presque pareil", "2 mots contraires"],
+                    reponse: "2 mots de même sens"
+                },
+ 		{
+                    question: "Conjugue 'crier' à l'imparfait à la 1ère P.P.",
+                    options: ["criez", "criions", "crions", "criiez"],
+                    reponse: "criions"
+                },
+ 		{
+                    question: "Conjugue 'manger' au présent à la 2e P.S.",
+                    options: ["mange", "manget", "manges", "manged"],
+                    reponse: "manges"
+                },
+ 		{
+                    question: "Conjugue 'manger' à l'imparfait à la 2e P.S.",
+                    options: ["mangais", "mangait", "mangeais", "mangeait"],
+                    reponse: "mangeais"
+                },
+ 		{
+                    question: "Corrige l'orthographe : 'C'est toi la plus joli, ma chérie.",
+                    options: ["C'est = Sais", "plus = plu", "joli = jolie", "chérie = chéri"],
+                    reponse: "joli = jolie"
+                },
+ 		{
+                    question: "Où est placé un suffixe ?",
+                    options: ["avant un mot", "après un mot", "dans le mot"],
+                    reponse: "après un mot"
+                },
+ 		{
+                    question: "Corrige la phrase : 'Il et fou de répéter ça !'",
+                    options: ["et = est", "fou = fous", "répéter = répété", "ça = sa"],
+                    reponse: "et = est"
+                },
+ 		{
+                    question: "'Kimmy lui avait demandé' quelle est la nature de 'lui' ?",
+                    options: ["Pronom", "Déterminant", "Adverbe", "Préposition"],
+                    reponse: "Pronom"
+                },
+            ],
+            "Sciences": [
+                {
+                    question: "Que veut désigne 'la biodiversité' ?",
+                    options: ["Les plantes", "Les animaux", "L'ensemble des êtres vivants"],
+                    reponse: "L'ensemble des êtres vivants"
+                },
+                {
+                    question: "Qu'est-ce qu'une éruption effusive ?",
+                    options: ["Une éruption qui explose", "Une éruption avec de la lave qui coule", "Une éruption avec une nuée ardente", "Une éruption dans la mer"],
+                    reponse: "Une éruption avec de la lave qui coule"
+                },
+ 		{
+                    question: "Quel est l'aspect de l'asténosphère ?",
+                    options: ["Rigide", "Liquide", "Parfois liquide parfois solide"],
+                    reponse: "Rigide"
+                },
+ 		{
+                    question: "Qu'est-ce qui ne protège pas contre les tsunamis ?",
+                    options: ["La mangrove", "Les coraux", "Les brise vagues", "Les ports"],
+                    reponse: "Les ports"
+                },
+ 		{
+                    question: "Parmi ces énergies, laquelle n'est pas une énergie renouvelable ?",
+                    options: ["Le pétrole", "Le soleil", "L'eau", "Le vent"],
+                    reponse: "Le soleil"
+                },
+	 	{
+                    question: "Quel gaz est majoritairement responsable du réchauffement climatique ?",
+                    options: ["Le dioxyde de carbone", "L'azote", "Le dioxygène", "La méthane"],
+                    reponse: "L'ensemble des êtres vivants"
+                },
+            ]
+        };
+
+        let currentQuestion = 0;
+        let score = 0;
+        let currentQuestions = [];
+        let leaderboard = [];
+        let playerName = "";
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function startGame(subject) {
+            playerName = prompt("Entrez votre nom :");
+            if (!playerName) return;
+
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById('quiz').style.display = 'block';
+
+            if (subject === 'all') {
+                currentQuestions = Object.values(questions).flat();
+            } else {
+                currentQuestions = questions[subject];
+            }
+            shuffleArray(currentQuestions);
+            currentQuestion = 0;
+            score = 0;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestion >= currentQuestions.length) {
+                showFinalScore();
+                return;
+            }
+
+            const questionData = currentQuestions[currentQuestion];
+            document.getElementById('question').textContent = questionData.question;
+
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            questionData.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option);
+                optionsDiv.appendChild(button);
+            });
+
+            document.getElementById('result').textContent = '';
+            document.getElementById('nextButton').style.display = 'none';
+        }
+
+        function checkAnswer(selectedAnswer) {
+            const questionData = currentQuestions[currentQuestion];
+            const resultDiv = document.getElementById('result');
+            const isCorrect = selectedAnswer === questionData.reponse;
+
+            if (isCorrect) {
+                resultDiv.textContent = "Correct !";
+                score++;
+            } else {
+                resultDiv.textContent = `Incorrect. La bonne réponse était : ${questionData.reponse}`;
+            }
+
+            document.getElementById('nextButton').style.display = 'block';
+            document.querySelectorAll('#options button').forEach(button => button.disabled = true);
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            showQuestion();
+        }
+
+        function showFinalScore() {
+            const quizDiv = document.getElementById('quiz');
+            quizDiv.innerHTML = `<h2>Jeu terminé !</h2>
+                                 <p>Votre score final : ${score}/${currentQuestions.length}</p>
+                                 <button onclick="returnToMenu()">Retour au menu</button>`;
+            updateLeaderboard();
+        }
+
+        function updateLeaderboard() {
+            leaderboard.push({name: playerName, score: score});
+            leaderboard.sort((a, b) => b.score - a.score);
+            leaderboard = leaderboard.slice(0, 5);  // Garder seulement le top 5
+
+            const leaderboardDiv = document.getElementById('leaderboard');
+            leaderboardDiv.innerHTML = '<h3>Classement</h3><ol>';
+            leaderboard.forEach(player => {
+                leaderboardDiv.innerHTML += `<li>${player.name}: ${player.score}</li>`;
+            });
+            leaderboardDiv.innerHTML += '</ol>';
+        }
+
+        function returnToMenu() {
+            document.getElementById('menu').style.display = 'block';
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('score').textContent = '';
+        }
+
+        document.getElementById('nextButton').addEventListener('click', nextQuestion);
+    </script>
+</body>
+</html>
